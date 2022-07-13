@@ -1,0 +1,16 @@
+
+name: Create Release
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  create-github-release:
+    runs-on: ubuntu-latest
+    name: Create Github Release
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Create Release
+        run: gh release create -${{ github.ref}} -F ../../changelog.md
