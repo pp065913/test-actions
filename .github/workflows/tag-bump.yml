@@ -11,8 +11,23 @@ jobs:
       with:
         fetch-depth: '0'
     - name: Bump version and push tag
+      id: bump_tag
       uses: anothrNick/github-tag-action@1.36.0
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         WITH_V: true
         INITIAL_VERSION: '1.0.0'
+    outputs:
+      new_tag: ${{ steps.bump_tag_outputs.new_tag }}
+
+  create-github-release:
+    runs-on: ubuntu-latest
+    name: Create Github Release
+    needs: build
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Create Release
+        run: gh release create -${{ needs.build.outputs.new_tag }} -F ../../changelog.md
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
