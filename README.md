@@ -2,4 +2,4 @@
 
 test-tag-bump
 test test2
-test-release
+test-release2
